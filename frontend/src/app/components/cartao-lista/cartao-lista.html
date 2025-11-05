@@ -1,0 +1,72 @@
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  @for (cartao of cartoes(); track cartao.id) {
+    <div class="transform transition-all duration-300 hover:-translate-y-2">
+      <p-card styleClass="h-full hover:shadow-2xl transition-all duration-300 border border-gray-200 hover:border-blue-300 overflow-hidden">
+        <div
+          class="relative bg-linear-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-xl mb-4 overflow-hidden">
+          <!-- Padrão de fundo decorativo -->
+          <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16"></div>
+            <div class="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-12 -translate-x-12"></div>
+          </div>
+
+          <div class="relative z-10">
+            <div class="flex justify-between items-start mb-6">
+              <div class="flex items-center gap-2">
+                <i class="pi pi-shield"></i>
+                <span class="text-sm font-bold tracking-wider">AcademyBank</span>
+              </div>
+              <p-tag
+                [value]="cartao.ativo ? 'ATIVO' : 'INATIVO'"
+                [severity]="cartao.ativo ? 'success' : 'danger'"
+                [rounded]="true"
+                styleClass="shadow-lg" />
+            </div>
+
+            <div class="mb-8">
+              <div class="text-xs opacity-75 mb-2 tracking-wide">Nome do Cartão</div>
+              <div class="text-xl font-bold tracking-wide">{{ cartao.nomeCartao }}</div>
+            </div>
+
+            <div class="flex justify-between items-end">
+              <div>
+                <div class="text-xs opacity-75 mb-2 tracking-wide">Limite Disponível</div>
+                <div class="text-2xl font-bold tracking-tight">
+                  {{ cartao.limite | currency:'BRL':'symbol':'1.0-0' }}
+                </div>
+              </div>
+              <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2">
+                <p-chip [label]="'#' + cartao.id" styleClass="bg-transparent text-white border-0 text-sm font-bold" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-2 pt-3 border-t border-gray-100 mt-4">
+          <p-button
+            label="Ver Detalhes"
+            icon="pi pi-eye"
+            (onClick)="onDetalhar(cartao)"
+            severity="info"
+            [outlined]="true"
+            size="small"
+            styleClass="flex-1 transition-all duration-200 hover:scale-105" />
+          <p-button
+            icon="pi pi-pencil"
+            (onClick)="onEditar(cartao)"
+            severity="warn"
+            [outlined]="true"
+            [rounded]="true"
+            styleClass="transition-all duration-200 hover:scale-110 hover:rotate-12" />
+          <p-button
+            icon="pi pi-trash"
+            (onClick)="onRemover(cartao)"
+            severity="danger"
+            [outlined]="true"
+            [rounded]="true"
+            styleClass="transition-all duration-200 hover:scale-110 hover:rotate-12" />
+        </div>
+      </p-card>
+    </div>
+  }
+</div>
