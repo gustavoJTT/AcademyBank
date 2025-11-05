@@ -1,0 +1,118 @@
+<p-dialog
+  [visible]="visible()"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '90vw', maxWidth: '500px' }"
+  [contentStyle]="{ background: 'white' }"
+  (onHide)="onFechar()">
+  <ng-template #header>
+    <div class="flex items-center gap-3">
+      <i class="pi pi-credit-card text-2xl text-blue-600"></i>
+      <span class="text-xl font-bold text-gray-800">Detalhes do Cartão</span>
+    </div>
+  </ng-template>
+
+  @if (cartao(); as c) {
+    <div class="space-y-6 p-1">
+      <!-- Card Visual -->
+      <div
+        class="relative bg-linear-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-2xl overflow-hidden">
+        <!-- Padrão de fundo decorativo -->
+        <div class="absolute inset-0 opacity-10">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16"></div>
+          <div class="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-12 -translate-x-12"></div>
+        </div>
+
+        <div class="relative z-10">
+          <div class="flex justify-between items-start mb-6">
+            <div class="flex items-center gap-2">
+              <i class="pi pi-shield text-lg"></i>
+              <span class="text-sm font-bold tracking-wider">AcademyBank</span>
+            </div>
+            <p-tag
+              [value]="c.ativo ? 'ATIVO' : 'INATIVO'"
+              [severity]="c.ativo ? 'success' : 'danger'"
+              [rounded]="true"
+              styleClass="shadow-lg" />
+          </div>
+
+          <div class="mb-8">
+            <div class="text-xs opacity-75 mb-2 tracking-wide">Nome do Cartão</div>
+            <div class="text-2xl font-bold tracking-wide">{{ c.nomeCartao }}</div>
+          </div>
+
+          <div class="flex justify-between items-end">
+            <div>
+              <div class="text-xs opacity-75 mb-2 tracking-wide">Limite Disponível</div>
+              <div class="text-3xl font-bold tracking-tight">
+                {{ c.limite | currency:'BRL':'symbol':'1.0-0' }}
+              </div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3">
+              <p-chip [label]="'#' + c.id" styleClass="bg-transparent text-white border-0 text-sm font-bold" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informações Detalhadas -->
+      <div class="bg-linear-to-b from-gray-50 to-white rounded-xl p-6 space-y-3 border border-gray-100 shadow-sm">
+        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Informações Detalhadas</h3>
+
+        <div class="flex justify-between items-center py-4 border-b border-gray-200 hover:bg-blue-50 transition-colors duration-200 px-3 rounded-lg">
+          <span class="text-gray-600 font-medium flex items-center gap-2">
+            <i class="pi pi-hashtag text-blue-600"></i>
+            <span>ID do Cartão</span>
+          </span>
+          <span class="font-bold text-gray-800 bg-blue-100 px-3 py-1 rounded-full">{{ c.id }}</span>
+        </div>
+
+        <div class="flex justify-between items-center py-4 border-b border-gray-200 hover:bg-purple-50 transition-colors duration-200 px-3 rounded-lg">
+          <span class="text-gray-600 font-medium flex items-center gap-2">
+            <i class="pi pi-credit-card text-purple-600"></i>
+            <span>Nome</span>
+          </span>
+          <span class="font-bold text-gray-800">{{ c.nomeCartao }}</span>
+        </div>
+
+        <div class="flex justify-between items-center py-4 border-b border-gray-200 hover:bg-green-50 transition-colors duration-200 px-3 rounded-lg">
+          <span class="text-gray-600 font-medium flex items-center gap-2">
+            <i class="pi pi-dollar text-green-600"></i>
+            <span>Limite</span>
+          </span>
+          <span class="font-bold text-green-600 text-lg">
+            {{ c.limite | currency:'BRL':'symbol':'1.2-2' }}
+          </span>
+        </div>
+
+        <div class="flex justify-between items-center py-4 hover:bg-gray-50 transition-colors duration-200 px-3 rounded-lg">
+          <span class="text-gray-600 font-medium flex items-center gap-2">
+            <i class="pi pi-circle-fill" [class.text-green-600]="c.ativo" [class.text-red-600]="!c.ativo"></i>
+            <span>Status</span>
+          </span>
+          <p-tag
+            [value]="c.ativo ? 'ATIVO' : 'INATIVO'"
+            [severity]="c.ativo ? 'success' : 'danger'"
+            styleClass="shadow-sm" />
+        </div>
+      </div>
+    </div>
+  }
+
+  <ng-template #footer>
+    <div class="flex justify-end gap-3">
+      <p-button
+        label="Fechar"
+        icon="pi pi-times"
+        (onClick)="onFechar()"
+        severity="secondary"
+        [outlined]="true" />
+      <p-button
+        label="Editar"
+        icon="pi pi-pencil"
+        (onClick)="onEditar()"
+        severity="warn" />
+    </div>
+  </ng-template>
+</p-dialog>

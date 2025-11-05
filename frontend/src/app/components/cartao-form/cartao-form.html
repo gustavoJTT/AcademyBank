@@ -1,0 +1,156 @@
+<p-dialog
+  [visible]="visible()"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '90vw', maxWidth: '550px' }"
+  [contentStyle]="{ background: 'white' }"
+  (onHide)="onCancelar()">
+  <ng-template #header>
+    <div class="flex items-center gap-3">
+      <i [class]="modoEdicao() ? 'pi pi-pencil text-2xl text-yellow-600' : 'pi pi-plus-circle text-2xl text-blue-600'"></i>
+      <span class="text-xl font-bold text-gray-800">
+        {{ modoEdicao() ? 'Editar Cartão' : 'Novo Cartão Virtual' }}
+      </span>
+    </div>
+  </ng-template>
+
+  <div class="space-y-6 p-1">
+    <!-- Preview do Cartão -->
+    <div
+      class="relative bg-linear-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-2xl transform transition-all duration-300 hover:scale-[1.02] hover:shadow-indigo-500/50">
+      <!-- Padrão de fundo decorativo -->
+      <div class="absolute inset-0 opacity-10 rounded-2xl overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16"></div>
+        <div class="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full translate-y-12 -translate-x-12"></div>
+      </div>
+
+      <div class="relative z-10">
+        <div class="flex justify-between items-start mb-6">
+          <div class="flex items-center gap-2">
+            <i class="pi pi-shield text-lg"></i>
+            <span class="text-sm font-bold tracking-wider">AcademyBank</span>
+          </div>
+          <span
+            [class]="ativo() ? 'bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg' : 'bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg'">
+            {{ ativo() ? 'ATIVO' : 'INATIVO' }}
+          </span>
+        </div>
+
+        <div class="mb-8">
+          <div class="text-xs opacity-75 mb-2 tracking-wide">Nome do Cartão</div>
+          <div class="text-2xl font-bold tracking-wide">
+            {{ nomeCartao() || 'Nome do Cartão' }}
+          </div>
+        </div>
+
+        <div class="flex justify-between items-end">
+          <div>
+            <div class="text-xs opacity-75 mb-2 tracking-wide">Limite Disponível</div>
+            <div class="text-3xl font-bold tracking-tight">
+              {{ limite() | currency:'BRL':'symbol':'1.0-0' }}
+            </div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3">
+            <i class="pi pi-credit-card text-3xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário -->
+    <form class="space-y-5 bg-linear-to-b from-gray-50 to-white rounded-xl p-6 shadow-sm border border-gray-100">
+      <!-- Nome do Cartão -->
+      <div class="flex flex-col gap-2">
+        <label for="nomeCartao" class="font-semibold text-gray-700 flex items-center gap-2">
+          <i class="pi pi-credit-card text-blue-600"></i>
+          <span>Nome do Cartão</span>
+          <span class="text-red-500">*</span>
+        </label>
+        <input
+          pInputText
+          id="nomeCartao"
+          [(ngModel)]="nomeCartao"
+          name="nomeCartao"
+          placeholder="Ex: Cartão Principal"
+          class="w-full transition-all duration-200"
+          [class.ng-invalid]="!nomeCartao().trim()" />
+        @if (!nomeCartao().trim()) {
+          <small class="text-red-500 flex items-center gap-1 animate-pulse">
+            <i class="pi pi-exclamation-circle"></i>
+            <span>Campo obrigatório</span>
+          </small>
+        }
+      </div>
+
+      <!-- Limite -->
+      <div class="flex flex-col gap-2">
+        <label for="limite" class="font-semibold text-gray-700 flex items-center gap-2">
+          <i class="pi pi-dollar text-green-600"></i>
+          <span>Limite</span>
+          <span class="text-red-500">*</span>
+        </label>
+        <div class="flex items-center gap-3 bg-white rounded-lg border border-gray-200 p-3 transition-all duration-200 hover:border-blue-400 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200">
+          <span class="text-xl font-bold text-gray-700">R$</span>
+          <input
+            pInputText
+            id="limite"
+            type="number"
+            [(ngModel)]="limite"
+            name="limite"
+            placeholder="0,00"
+            [min]="0"
+            [step]="100"
+            class="flex-1 border-0 outline-none"
+            [class.ng-invalid]="limite() <= 0" />
+        </div>
+        @if (limite() <= 0) {
+          <small class="text-red-500 flex items-center gap-1 animate-pulse">
+            <i class="pi pi-exclamation-circle"></i>
+            <span>O limite deve ser maior que zero</span>
+          </small>
+        }
+      </div>
+
+      <!-- Status Ativo -->
+      <div class="flex items-center justify-between p-5 bg-white rounded-xl border-2 transition-all duration-200"
+           [class.border-green-300]="ativo()"
+           [class.bg-green-50]="ativo()"
+           [class.border-red-300]="!ativo()"
+           [class.bg-red-50]="!ativo()">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
+               [class.bg-green-100]="ativo()"
+               [class.bg-red-100]="!ativo()">
+            <i class="pi pi-circle-fill text-lg" [class.text-green-600]="ativo()" [class.text-red-600]="!ativo()"></i>
+          </div>
+          <div>
+            <label for="ativo" class="font-semibold text-gray-800 cursor-pointer">Cartão Ativo</label>
+            <p class="text-xs text-gray-600">{{ ativo() ? 'Habilitado para uso' : 'Bloqueado temporariamente' }}</p>
+          </div>
+        </div>
+        <p-toggleSwitch
+          inputId="ativo"
+          [(ngModel)]="ativo"
+          name="ativo" />
+      </div>
+    </form>
+  </div>
+
+  <ng-template #footer>
+    <div class="flex justify-end gap-3">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        (onClick)="onCancelar()"
+        severity="secondary"
+        [outlined]="true" />
+      <p-button
+        [label]="modoEdicao() ? 'Salvar Alterações' : 'Criar Cartão'"
+        [icon]="modoEdicao() ? 'pi pi-check' : 'pi pi-plus'"
+        (onClick)="onSalvar()"
+        [severity]="modoEdicao() ? 'warn' : 'success'"
+        [disabled]="!isFormValido()" />
+    </div>
+  </ng-template>
+</p-dialog>

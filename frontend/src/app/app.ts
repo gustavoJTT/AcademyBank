@@ -1,16 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Button } from 'primeng/button';
-import { Dialog } from 'primeng/dialog';
-import { InputText } from 'primeng/inputtext';
-import { InputNumber } from 'primeng/inputnumber';
-import { Card } from 'primeng/card';
 import { Toast } from 'primeng/toast';
-import { Tag } from 'primeng/tag';
 import { Chip } from 'primeng/chip';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { CartaoLista } from './components/cartao-lista/cartao-lista';
+import { CartaoDetalhes } from './components/cartao-detalhes/cartao-detalhes';
+import { CartaoForm } from './components/cartao-form/cartao-form';
 
 interface CartaoVirtual {
   id: number;
@@ -23,16 +20,13 @@ interface CartaoVirtual {
   selector: 'app-root',
   imports: [
     CommonModule,
-    FormsModule,
     Button,
-    Dialog,
-    InputText,
-    InputNumber,
-    Card,
     Toast,
-    Tag,
     Chip,
-    ConfirmDialog
+    ConfirmDialog,
+    CartaoLista,
+    CartaoDetalhes,
+    CartaoForm
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './app.html',
@@ -45,18 +39,12 @@ export class App {
     { id: 3, nomeCartao: 'Cartão Premium', limite: 10000, ativo: true }
   ]);
 
-  dialogVisible = signal(false);
+  dialogForm = signal(false);
   dialogDetalhes = signal(false);
-  isEditMode = signal(false);
+  modoEdicao = signal(false);
 
   cartaoSelecionado = signal<CartaoVirtual | null>(null);
-
-  cartaoForm = signal<CartaoVirtual>({
-    id: 0,
-    nomeCartao: '',
-    limite: 0,
-    ativo: true
-  });
+  cartaoEditando = signal<CartaoVirtual | null>(null);
 
   private proximoId = 4;
 
@@ -65,50 +53,35 @@ export class App {
     private confirmationService: ConfirmationService
   ) {}
 
-  // Listar (já está no signal cartoes)
+  // Handlers para eventos dos componentes filhos
 
-  // Detalhar
-  detalharCartao(cartao: CartaoVirtual): void {
+  // Detalhar - recebe evento do componente CartaoLista
+  onDetalhar(cartao: CartaoVirtual): void {
     this.cartaoSelecionado.set({ ...cartao });
     this.dialogDetalhes.set(true);
   }
 
-  // Incluir
-  abrirDialogIncluir(): void {
-    this.isEditMode.set(false);
-    this.cartaoForm.set({
-      id: 0,
-      nomeCartao: '',
-      limite: 0,
-      ativo: true
-    });
-    this.dialogVisible.set(true);
+  // Incluir - abre o formulário em modo criação
+  onIncluir(): void {
+    this.modoEdicao.set(false);
+    this.cartaoEditando.set(null);
+    this.dialogForm.set(true);
   }
 
-  // Alterar
-  abrirDialogEditar(cartao: CartaoVirtual): void {
-    this.isEditMode.set(true);
-    this.cartaoForm.set({ ...cartao });
-    this.dialogVisible.set(true);
+  // Alterar - recebe evento do componente CartaoLista ou CartaoDetalhes
+  onEditar(cartao: CartaoVirtual): void {
+    this.modoEdicao.set(true);
+    this.cartaoEditando.set({ ...cartao });
+    this.dialogForm.set(true);
+    this.dialogDetalhes.set(false);
   }
 
-  // Salvar (incluir ou alterar)
-  salvarCartao(): void {
-    const cartao = this.cartaoForm();
-
-    if (!cartao.nomeCartao || cartao.limite <= 0) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Erro',
-        detail: 'Preencha todos os campos corretamente!'
-      });
-      return;
-    }
-
-    if (this.isEditMode()) {
-      // Alterar
-      this.cartoes.update(cartoes =>
-        cartoes.map(c => c.id === cartao.id ? { ...cartao } : c)
+  // Salvar - recebe evento do componente CartaoForm
+  onSalvar(cartao: CartaoVirtual): void {
+    if (this.modoEdicao()) {
+      // Alterar cartão existente
+      this.cartoes.update((cartoes: CartaoVirtual[]) =>
+        cartoes.map((c: CartaoVirtual) => c.id === cartao.id ? { ...cartao } : c)
       );
       this.messageService.add({
         severity: 'success',
@@ -116,9 +89,9 @@ export class App {
         detail: 'Cartão atualizado com sucesso!'
       });
     } else {
-      // Incluir
+      // Incluir novo cartão
       const novoCartao = { ...cartao, id: this.proximoId++ };
-      this.cartoes.update(cartoes => [...cartoes, novoCartao]);
+      this.cartoes.update((cartoes: CartaoVirtual[]) => [...cartoes, novoCartao]);
       this.messageService.add({
         severity: 'success',
         summary: 'Sucesso',
@@ -126,11 +99,12 @@ export class App {
       });
     }
 
-    this.dialogVisible.set(false);
+    this.dialogForm.set(false);
+    this.cartaoEditando.set(null);
   }
 
-  // Remover
-  removerCartao(cartao: CartaoVirtual): void {
+  // Remover - recebe evento do componente CartaoLista
+  onRemover(cartao: CartaoVirtual): void {
     this.confirmationService.confirm({
       message: `Deseja realmente remover o cartão ${cartao.nomeCartao}?`,
       header: 'Confirmar Remoção',
@@ -139,8 +113,8 @@ export class App {
       rejectLabel: 'Cancelar',
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
-        this.cartoes.update(cartoes =>
-          cartoes.filter(c => c.id !== cartao.id)
+        this.cartoes.update((cartoes: CartaoVirtual[]) =>
+          cartoes.filter((c: CartaoVirtual) => c.id !== cartao.id)
         );
         this.messageService.add({
           severity: 'success',
@@ -151,21 +125,14 @@ export class App {
     });
   }
 
-  alternarStatus(cartao: CartaoVirtual): void {
-    const novoStatus = !cartao.ativo;
-    this.cartoes.update(cartoes =>
-      cartoes.map(c => c.id === cartao.id ? { ...c, ativo: novoStatus } : c)
-    );
-    this.messageService.add({
-      severity: novoStatus ? 'success' : 'warn',
-      summary: 'Status Alterado',
-      detail: `Cartão ${novoStatus ? 'ativado' : 'desativado'} com sucesso!`,
-      life: 2000
-    });
+  // Fechar - recebe eventos dos componentes de modal
+  onFecharDetalhes(): void {
+    this.dialogDetalhes.set(false);
+    this.cartaoSelecionado.set(null);
   }
 
-  cancelar(): void {
-    this.dialogVisible.set(false);
-    this.dialogDetalhes.set(false);
+  onCancelarForm(): void {
+    this.dialogForm.set(false);
+    this.cartaoEditando.set(null);
   }
 }
