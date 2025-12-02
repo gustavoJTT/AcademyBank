@@ -1,8 +1,7 @@
 # 🏦 AcademyBank
 
-> Plataforma bancária digital educacional para estudos e aprendizado de desenvolvimento de sistemas financeiros
+> Sistema de Gerenciamento de Cartões Virtuais - Plataforma bancária digital educacional
 
-<!-- [![GitHub](https://img.shields.io/github/license/gustavoJTT/AcademyBank)](LICENSE) -->
 [![GitHub issues](https://img.shields.io/github/issues/gustavoJTT/AcademyBank)](https://github.com/gustavoJTT/AcademyBank/issues)
 [![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)](https://github.com/gustavoJTT/AcademyBank)
 
@@ -13,41 +12,99 @@
 - [💡 Sobre o Projeto](#-sobre-o-projeto)
 - [🎯 Funcionalidades](#-funcionalidades)
 - [🛠️ Tecnologias](#️-tecnologias)
+- [🚀 Como Executar](#-como-executar)
 - [📁 Estrutura do Projeto](#-estrutura-do-projeto)
 - [🗺️ Roadmap](#️-roadmap)
-- [🤝 Contribuição](#-contribuição)
 
 ---
 
 ## 💡 Sobre o Projeto
 
-O **AcademyBank** é uma plataforma bancária digital moderna e segura, desenvolvida **exclusivamente para fins educacionais e estudos**. Este projeto simula a gestão de contas, transações e serviços financeiros online, proporcionando um ambiente de aprendizado prático para desenvolvimento de sistemas bancários.
+O **AcademyBank** é um sistema completo de gerenciamento de cartões virtuais, desenvolvido com **Django REST Framework** no backend e **Angular** no frontend. O projeto demonstra uma arquitetura moderna de API RESTful integrada com interface responsiva.
 
-> ⚠️ **Importante**: Este é um projeto acadêmico/educacional e não deve ser usado para transações financeiras reais.
+> ⚠️ **Importante**: Este é um projeto educacional e não deve ser usado para transações financeiras reais.
 
-### ✨ Principais Diferenciais
+### ✨ Principais Características
 
-- Interface intuitiva e responsiva
-- Segurança de ponta com criptografia avançada
-- Processamento de transações em tempo real
-- Painel administrativo completo
+- **Backend RESTful**: API completa com Django REST Framework
+- **Frontend Moderno**: Angular com standalone components e PrimeNG
+- **CRUD Completo**: Criação, leitura, atualização e exclusão de cartões
+- **Interface Responsiva**: UI moderna com componentes PrimeNG
+- **Validações**: Validações no frontend e backend
 
 ---
 
 ## 🎯 Funcionalidades
 
-### 👤 Para Clientes
+### 💳 Gerenciamento de Cartões Virtuais
 
-- ✅ Cadastro e autenticação segura
-- 💳 Abertura e gerenciamento de contas bancárias
-- 💸 Transferências (TED, PIX, entre contas)
-- 🧾 Pagamento de boletos e contas
-- 📊 Consulta de saldo e extrato detalhado
-- 🔔 Notificações em tempo real
+- ✅ Listagem de todos os cartões
+- ➕ Criação de novos cartões virtuais
+- ✏️ Edição de cartões existentes
+- 🗑️ Remoção de cartões (com confirmação)
+- 👁️ Visualização detalhada de cartões
+- 🔄 Ativação/desativação de cartões
+- 💰 Definição de limites personalizados
+- 🔔 Notificações de sucesso/erro em tempo real
 
-### 🛡️ Para Administradores
+---
 
-- 📈 Dashboard com métricas e relatórios
+## 🛠️ Tecnologias
+
+### Backend
+- **Python 3.14**
+- **Django 5.2.9**
+- **Django REST Framework 3.16.1**
+- **Django CORS Headers 4.9.0**
+- **SQLite** (banco de dados)
+
+### Frontend
+- **Angular** (Standalone Components)
+- **TypeScript**
+- **PrimeNG** (componentes UI)
+- **RxJS** (programação reativa)
+
+---
+
+## 🚀 Como Executar
+
+### Método Rápido (Script Automatizado)
+
+```bash
+./start.sh
+```
+
+### Método Manual
+
+#### Backend
+
+1. Ative o ambiente virtual e inicie o servidor:
+```bash
+source env/bin/activate
+cd backend/AcademyBank
+python manage.py runserver
+```
+
+O backend estará disponível em `http://localhost:8000`
+
+#### Frontend
+
+2. Em outro terminal, inicie o frontend:
+```bash
+cd frontend
+npm install  # primeira vez apenas
+ng serve
+```
+
+O frontend estará disponível em `http://localhost:4200`
+
+### 📚 Documentação Completa
+
+Para instruções detalhadas de instalação, configuração e desenvolvimento, consulte o [SETUP.md](SETUP.md).
+
+---
+
+## 📁 Estrutura do Projeto
 - 👥 Gerenciamento de usuários e contas
 - 🔍 Auditoria e monitoramento de transações
 - ⚙️ Configurações do sistema
@@ -58,7 +115,7 @@ O **AcademyBank** é uma plataforma bancária digital moderna e segura, desenvol
 
 ### Frontend
 
-- ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white) **Next.js 14** - Framework React para aplicações web
+- ![Angular](https://img.shields.io/badge/Angular-000000?style=flat&logo=Angular&logoColor=white) **Angular 20** - Framework para aplicações web
 - ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white) **Tailwind CSS** - Framework CSS utilitário
 - ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white) **TypeScript** - Superset JavaScript tipado
 
