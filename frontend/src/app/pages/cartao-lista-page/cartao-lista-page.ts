@@ -22,7 +22,7 @@ interface CartaoVirtual {
   template: `
     <p-toast />
     <p-confirmDialog />
-    
+
     <div class="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-100">
       <!-- Header com gradiente -->
       <div class="bg-linear-to-r from-blue-600 via-indigo-600 to-purple-700 shadow-2xl">
@@ -67,7 +67,7 @@ interface CartaoVirtual {
               <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-blue-400 overflow-hidden h-full flex flex-col relative">
                 <!-- Brilho no hover -->
                 <div class="absolute inset-0 bg-linear-to-br from-blue-400/0 via-purple-400/0 to-pink-400/0 group-hover:from-blue-400/10 group-hover:via-purple-400/10 group-hover:to-pink-400/10 transition-all duration-500 pointer-events-none"></div>
-                
+
                 <!-- Card Visual -->
                 <div class="relative bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700 p-6 text-white group-hover:from-blue-500 group-hover:via-indigo-500 group-hover:to-purple-600 transition-all duration-500">
                   <!-- Padrão animado de fundo -->

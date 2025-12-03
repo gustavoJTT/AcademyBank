@@ -16,7 +16,7 @@ import { CartaoService } from '../../services/cartao.service';
   standalone: true,
   template: `
     <p-toast />
-    
+
     <div class="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-100 py-8">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Breadcrumb/Navegação -->
@@ -49,7 +49,7 @@ import { CartaoService } from '../../services/cartao.service';
                 <div class="absolute top-0 right-0 w-40 h-40 bg-white rounded-full -translate-y-20 translate-x-20"></div>
                 <div class="absolute bottom-0 left-0 w-32 h-32 bg-white rounded-full translate-y-16 -translate-x-16"></div>
               </div>
-              
+
               <div class="relative z-10 flex items-center gap-4 text-white">
                 <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-3 border border-white/30">
                   <i [class]="modoEdicao() ? 'pi pi-pencil text-3xl' : 'pi pi-plus-circle text-3xl'"></i>
@@ -183,8 +183,8 @@ import { CartaoService } from '../../services/cartao.service';
                         </p>
                       </div>
                     </div>
-                    <p-toggleSwitch 
-                      [(ngModel)]="ativo" 
+                    <p-toggleSwitch
+                      [(ngModel)]="ativo"
                       styleClass="scale-150 transition-transform hover:scale-[1.6]" />
                   </div>
                 </div>
@@ -197,8 +197,8 @@ import { CartaoService } from '../../services/cartao.service';
                     <div>
                       <p class="text-sm font-bold text-blue-900 mb-2">{{ modoEdicao() ? 'Atenção' : 'Informação Importante' }}</p>
                       <p class="text-sm text-blue-700 leading-relaxed">
-                        {{ modoEdicao() 
-                          ? 'As alterações serão aplicadas imediatamente após salvar. Certifique-se de que todas as informações estão corretas.' 
+                        {{ modoEdicao()
+                          ? 'As alterações serão aplicadas imediatamente após salvar. Certifique-se de que todas as informações estão corretas.'
                           : 'O cartão virtual será criado instantaneamente e estará disponível para uso de acordo com o limite definido e status escolhido.' }}
                       </p>
                     </div>

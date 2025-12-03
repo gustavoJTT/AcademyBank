@@ -22,7 +22,7 @@ interface CartaoVirtual {
   standalone: true,
   template: `
     <p-toast />
-    
+
     <div class="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-100 py-8">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Breadcrumb/Navegação -->
@@ -55,7 +55,7 @@ interface CartaoVirtual {
                 <div class="absolute top-0 right-0 w-40 h-40 bg-white rounded-full -translate-y-20 translate-x-20"></div>
                 <div class="absolute bottom-0 left-0 w-32 h-32 bg-white rounded-full translate-y-16 -translate-x-16"></div>
               </div>
-              
+
               <div class="relative z-10 flex items-center justify-between text-white">
                 <div class="flex items-center gap-4">
                   <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-3 border border-white/30">
@@ -213,14 +213,21 @@ interface CartaoVirtual {
               <!-- Ações -->
               <div class="flex gap-3 pt-4 border-t border-gray-200">
                 <p-button
-                  label="Voltar para Lista"
+                  label="Voltar"
                   icon="pi pi-arrow-left"
                   (onClick)="onVoltar()"
                   severity="secondary"
                   [outlined]="true"
                   styleClass="flex-1" />
                 <p-button
-                  label="Editar Cartão"
+                  label="Remover"
+                  icon="pi pi-trash"
+                  (onClick)="onRemover()"
+                  severity="danger"
+                  [outlined]="true"
+                  styleClass="flex-1" />
+                <p-button
+                  label="Editar"
                   icon="pi pi-pencil"
                   (onClick)="onEditar()"
                   severity="contrast"
@@ -295,5 +302,28 @@ export class CartaoDetalhesPage implements OnInit {
 
   onEditar(): void {
     this.router.navigate(['/cartoes', this.cartaoId, 'editar']);
+  }
+
+  onRemover(): void {
+    this.cartaoService.remover(this.cartaoId).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Cartão removido com sucesso!'
+        });
+        setTimeout(() => {
+          this.router.navigate(['/cartoes']);
+        }, 1500);
+      },
+      error: (erro) => {
+        console.error('Erro ao remover cartão:', erro);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Não foi possível remover o cartão.'
+        });
+      }
+    });
   }
 }
