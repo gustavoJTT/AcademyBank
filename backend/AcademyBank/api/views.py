@@ -1,7 +1,9 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from django.contrib.auth.models import User
 from .models import CartaoVirtual
-from .serializers import CartaoVirtualSerializer
+from .serializers import CartaoVirtualSerializer, UserSerializer
 
 class CartaoVirtualViewSet(viewsets.ModelViewSet):
     """
@@ -30,3 +32,13 @@ class CartaoVirtualViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class RegisterView(generics.CreateAPIView):
+    """
+    View para registro de novos usuários.
+    Permite que qualquer pessoa (não autenticada) crie uma conta.
+    """
+    queryset = User.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = UserSerializer
+
