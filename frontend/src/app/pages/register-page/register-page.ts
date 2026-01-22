@@ -22,14 +22,14 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
   template: `
     <p-toast />
-    <div class="register-container">
-      <div class="register-card">
-        <h1>Academy Bank</h1>
-        <h2>Cadastro</h2>
+    <div class="flex justify-center items-center min-h-screen bg-linear-to-br from-blue-600 via-purple-600 to-violet-700 p-5">
+      <div class="bg-white p-10 rounded-xl shadow-2xl w-full max-w-md">
+        <h1 class="text-blue-600 m-0 mb-2 text-3xl text-center font-bold">Academy Bank</h1>
+        <h2 class="text-gray-800 m-0 mb-8 text-2xl text-center font-normal">Cadastro</h2>
 
-        <form (ngSubmit)="onRegister()" #registerForm="ngForm">
-          <div class="form-group">
-            <label for="username">Usuário</label>
+        <form (ngSubmit)="onRegister()" #registerForm="ngForm" class="space-y-5">
+          <div>
+            <label for="username" class="block mb-2 text-gray-700 font-medium">Usuário</label>
             <input
               pInputText
               id="username"
@@ -41,8 +41,8 @@ import { MessageService } from 'primeng/api';
             />
           </div>
 
-          <div class="form-group">
-            <label for="email">Email</label>
+          <div>
+            <label for="email" class="block mb-2 text-gray-700 font-medium">Email</label>
             <input
               pInputText
               type="email"
@@ -55,8 +55,8 @@ import { MessageService } from 'primeng/api';
             />
           </div>
 
-          <div class="form-group">
-            <label for="password">Senha</label>
+          <div>
+            <label for="password" class="block mb-2 text-gray-700 font-medium">Senha</label>
             <input
               pInputText
               type="password"
@@ -69,8 +69,8 @@ import { MessageService } from 'primeng/api';
             />
           </div>
 
-          <div class="form-group">
-            <label for="password2">Confirmar Senha</label>
+          <div>
+            <label for="password2" class="block mb-2 text-gray-700 font-medium">Confirmar Senha</label>
             <input
               pInputText
               type="password"
@@ -89,89 +89,17 @@ import { MessageService } from 'primeng/api';
             label="Cadastrar"
             [disabled]="!registerForm.valid || isLoading"
             [loading]="isLoading"
-            class="w-full"
+            class="w-full mt-3"
           ></button>
         </form>
 
-        <div class="login-link">
-          <p>Já tem uma conta? <a routerLink="/login">Faça login</a></p>
+        <div class="mt-5 text-center">
+          <p class="text-gray-600 m-0">Já tem uma conta? <a routerLink="/login" class="text-blue-600 no-underline font-medium hover:underline">Faça login</a></p>
         </div>
       </div>
     </div>
   `,
-  styles: [`
-    .register-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 20px;
-    }
-
-    .register-card {
-      background: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
-    }
-
-    h1 {
-      color: #667eea;
-      margin: 0 0 10px 0;
-      font-size: 28px;
-      text-align: center;
-    }
-
-    h2 {
-      color: #333;
-      margin: 0 0 30px 0;
-      font-size: 24px;
-      text-align: center;
-      font-weight: 400;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      color: #555;
-      font-weight: 500;
-    }
-
-    .w-full {
-      width: 100%;
-    }
-
-    button[type="submit"] {
-      margin-top: 10px;
-    }
-
-    .login-link {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .login-link p {
-      color: #666;
-      margin: 0;
-    }
-
-    .login-link a {
-      color: #667eea;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .login-link a:hover {
-      text-decoration: underline;
-    }
-  `]
+  styles: []
 })
 export class RegisterPage {
   private authService = inject(AuthService);

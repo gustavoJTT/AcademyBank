@@ -1,4 +1,4 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -123,7 +123,7 @@ import { CartaoService } from '../../services/cartao.service';
                 </h3>
 
                 <div class="space-y-2">
-                  <label class="block text-sm font-bold text-gray-700 flex items-center gap-2">
+                  <label class="flex text-sm font-bold text-gray-700 items-center gap-2">
                     <div class="bg-blue-100 p-1.5 rounded-lg">
                       <i class="pi pi-tag text-blue-600 text-xs"></i>
                     </div>
@@ -144,7 +144,7 @@ import { CartaoService } from '../../services/cartao.service';
                 </div>
 
                 <div class="space-y-2">
-                  <label class="block text-sm font-bold text-gray-700 flex items-center gap-2">
+                  <label class="flex text-sm font-bold text-gray-700 items-center gap-2">
                     <div class="bg-green-100 p-1.5 rounded-lg">
                       <i class="pi pi-dollar text-green-600 text-xs"></i>
                     </div>
@@ -233,7 +233,12 @@ import { CartaoService } from '../../services/cartao.service';
     </div>
   `
 })
-export class CartaoFormPage implements OnInit {
+export class CartaoFormPage {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private cartaoService = inject(CartaoService);
+  private messageService = inject(MessageService);
+
   nomeCartao = signal('');
   limite = signal<number>(0);
   ativo = signal(true);
@@ -241,21 +246,16 @@ export class CartaoFormPage implements OnInit {
   carregando = signal(false);
   cartaoId: number = 0;
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private cartaoService: CartaoService,
-    private messageService: MessageService
-  ) {}
-
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const id = params['id'];
-      if (id) {
-        this.cartaoId = Number(id);
-        this.modoEdicao.set(true);
-        this.carregarCartao();
-      }
+  constructor() {
+    effect(() => {
+      this.route.params.subscribe(params => {
+        const id = params['id'];
+        if (id) {
+          this.cartaoId = Number(id);
+          this.modoEdicao.set(true);
+          this.carregarCartao();
+        }
+      });
     });
   }
 

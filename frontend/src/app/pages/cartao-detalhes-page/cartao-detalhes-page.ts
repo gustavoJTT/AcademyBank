@@ -1,4 +1,4 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Button } from 'primeng/button';
@@ -251,22 +251,22 @@ interface CartaoVirtual {
     </div>
   `
 })
-export class CartaoDetalhesPage implements OnInit {
+export class CartaoDetalhesPage {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private cartaoService = inject(CartaoService);
+  private messageService = inject(MessageService);
+
   cartao = signal<CartaoVirtual | null>(null);
   carregando = signal(true);
   cartaoId: number = 0;
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private cartaoService: CartaoService,
-    private messageService: MessageService
-  ) {}
-
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.cartaoId = Number(params['id']);
-      this.carregarCartao();
+  constructor() {
+    effect(() => {
+      this.route.params.subscribe(params => {
+        this.cartaoId = Number(params['id']);
+        this.carregarCartao();
+      });
     });
   }
 

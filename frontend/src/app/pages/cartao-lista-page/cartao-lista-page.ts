@@ -1,4 +1,4 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
@@ -109,7 +109,7 @@ interface CartaoVirtual {
                 </div>
 
                 <!-- Ações com design melhorado -->
-                <div class="p-5 flex gap-2 bg-gradient-to-b from-gray-50 to-white border-t border-gray-100 mt-auto">
+                <div class="p-5 flex gap-2 bg-linear-to-b from-gray-50 to-white border-t border-gray-100 mt-auto">
                   <p-button
                     label="Detalhes"
                     icon="pi pi-eye"
@@ -160,17 +160,15 @@ interface CartaoVirtual {
     </div>
   `
 })
-export class CartaoListaPage implements OnInit {
+export class CartaoListaPage {
+  private router = inject(Router);
+  private cartaoService = inject(CartaoService);
+  private messageService = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
+
   cartoes = signal<CartaoVirtual[]>([]);
 
-  constructor(
-    private router: Router,
-    private cartaoService: CartaoService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService
-  ) {}
-
-  ngOnInit(): void {
+  constructor() {
     this.carregarCartoes();
   }
 

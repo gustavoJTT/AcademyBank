@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -23,9 +23,8 @@ interface PaginatedResponse {
   providedIn: 'root'
 })
 export class CartaoService {
+  private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8000/api/cartoes/';
-
-  constructor(private http: HttpClient) {}
 
   listar(): Observable<CartaoVirtual[]> {
     return this.http.get<PaginatedResponse>(this.apiUrl).pipe(
